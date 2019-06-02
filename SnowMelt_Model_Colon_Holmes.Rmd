@@ -41,7 +41,7 @@ source("model_3_output.R")
 
 ```{r}
 
-melt <- snow_melt(hm = snow_inputs$SWECM, Ts = snow_inputs$`snow surface temperatureC`, pw = 1000)
+melt <- snow_melt(hm = snow_inputs$SWECM, Ts = snow_inputs$`snow surface temperatureC`, pw = 1000, )
 
 ```
 
