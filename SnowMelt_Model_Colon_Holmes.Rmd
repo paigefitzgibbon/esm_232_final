@@ -1,0 +1,61 @@
+---
+title: "ESM_232_SnowMelt_Model_Colon_Holmes"
+author: "Mario Colon"
+date: "June 2, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+###Library Load
+
+```{r}
+
+library(tidyverse)
+
+```
+###Load in data
+
+```{r}
+
+snow_inputs <- read_csv("Inputs.csv")
+
+view(snow_inputs)
+
+```
+
+###Load three models
+
+```{r}
+
+source("model_1_warm.R")
+source("model_2_ripe.R")
+source("model_3_output.R")
+
+```
+
+
+##Model 1 - Warming Phase
+
+```{r}
+
+melt <- snow_melt(hm = snow_inputs$SWECM, Ts = snow_inputs$`snow surface temperatureC`, pw = 1000)
+
+```
+
+
+##Model 2 - Ripening Phase
+
+```{r}
+
+```
+
+
+##Model 3 - Output Phase 
+
+```{r}
+
+```
+

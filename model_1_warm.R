@@ -12,6 +12,7 @@
 
 
 snow_melt = function(hm, Ts, ci = 2102, pw = 1000, Tm = 0) {
+  
   Qcc = -ci*ρw*hm*(Ts-Tm) 
   
   return(Qcc)

@@ -15,5 +15,5 @@
 snow_output = function(hm, hwret = 0.03, pw = 1000, lambda = 0.334) {
   Qm3 = (hm - hwret)*w*lammda
   
-  return(Qm2)
+  return(Qm3)
 }
