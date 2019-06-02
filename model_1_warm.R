@@ -11,7 +11,7 @@
 #' 
 
 
-<<<<<<< HEAD
+
 snow_melt = function(hm, Ts, ci = 2102, pw = 1000, Tm = 0) {
   
   Qcc = -ci*ρw*hm*(Ts-Tm) 
@@ -21,6 +21,3 @@ snow_melt = function(hm, Ts, ci = 2102, pw = 1000, Tm = 0) {
 
   
 
-=======
-Qcc = -ci.ρw.hm.(Ts-Tm) 
->>>>>>> fe9010aaacf1d550ca4eec733de43da1b3c18872
