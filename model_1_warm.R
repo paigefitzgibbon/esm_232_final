@@ -1,6 +1,6 @@
 #' @title Snowmelt Model - Warming 
 #' 
-#' @param ci = heat capacity (constant), default = 2102 J kg -1 K-1
+#' @param ci = heat capacity of ice (constant), default = 2102 J kg -1 K-1
 #' @param pw = density of water (constant), default = 1000 kg m-3
 #' @param hm = water equivalent of snowpack (meters, input)
 #' @param Ts = snowpack temp (C, input)

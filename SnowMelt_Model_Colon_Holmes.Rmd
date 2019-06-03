@@ -14,7 +14,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 
 library(tidyverse)
-library(deSolve)
 
 ```
 ###Load in data
@@ -38,16 +37,6 @@ source("model_3_output.R")
 ```
 
 
-###Data Wrangling
-
-```{r}
-
-
-
-
-```
-
-
 ##Model 1 - Warming Phase
 
 ```{r}
@@ -59,9 +48,14 @@ warm = as.data.frame(warm)
 warm$time = c(seq(from = 1, to = 696))
 
 warm
- 
 
-ggplot(warm, aes(time, warm)) + geom_point()
+ggplot(warm, aes(time, warm)) + 
+  geom_line(col = "purple") +
+  theme_classic() + 
+  ylab("Energy Required (J m-2)") +
+  xlab("Time Step") +
+  ggtitle("Energy Requirment for Warming Phase")
+
 
 
 ```
@@ -71,7 +65,6 @@ ggplot(warm, aes(time, warm)) + geom_point()
 
 ```{r}
 
-
 ripe <- snow_ripe(hs = snow_inputs$`snow depthCM`, theta_ret = 0.03, pw = 1000, lambda = 0.334)
 
 ripe = as.data.frame(ripe)
@@ -79,9 +72,14 @@ ripe = as.data.frame(ripe)
 ripe$time = c(seq(from = 1, to = 696))
 
 ripe
- 
 
-ggplot(ripe, aes(time, ripe)) + geom_point()
+
+ggplot(ripe, aes(time, ripe)) + 
+  geom_line(col = "cyan") +
+  theme_classic() + 
+  ylab("Energy Required (J m-2)") +
+  xlab("Time Step") +
+  ggtitle("Energy Requirment for Ripeing Phase")
 
 ```
 
@@ -99,21 +97,110 @@ output$time = c(seq(from = 1, to = 696))
 
 output
 
-ggplot(output, aes(time, output)) + geom_point()
+ggplot(output, aes(time, output)) + 
+  geom_line(col = "purple") +
+  theme_classic() + 
+  ylab("Energy Required (J m-2)") +
+  xlab("Time Step") +
+  ggtitle("Energy Requirment for Output Phase")
 
 ```
 
-
-##ODE
+###Energy Combination 
 
 ```{r}
 
-swe_time_step = data.frame(time  = seq(from = 1, to = 696))
+combination_warm_ripe <- merge(warm, ripe, by ="time")
+final_combo <- merge(combination_warm_ripe, output, by = "time")
 
-solar_compare = list(hm = 195.22, Ts = -9.13, ci = -2102, pw = 1000, Tm = 0)
+final_combo$energy = final_combo$warm + final_combo$ripe + final_combo$output
 
-solar_results = ode(solar_compare$Ts, swe_time_step$time, snow_warm, solar_compare)
+final_combo
+
+ggplot(final_combo, aes(time, energy)) + 
+  geom_line(col = "cyan") +
+  theme_classic() + 
+  ylab("Energy Required (J m-2)") +
+  xlab("Time Step") +
+  ggtitle("Energy Requirment for Overall Snowmelt")
+
+```
+
+###Sensitivity Analysis
+
+
+##Climate Change 
+
+#Data change i.e. 3 degrees (C) to snow surface temp
+
+```{r}
+
+snow_inputs$temp_low = snow_inputs$`snow surface temperatureC` - 3 
+snow_inputs$temp_high = snow_inputs$`snow surface temperatureC` + 3
+ 
+warm_low <- snow_warm(hm = snow_inputs$SWECM, Ts = snow_inputs$temp_low, ci = 2101, pw = 1000, Tm = 0)
+warm_high <- snow_warm(hm = snow_inputs$SWECM, Ts = snow_inputs$temp_raise, ci = 2101, pw = 1000, Tm = 0)
+
+warm_low = as.data.frame(warm_low)
+warm_high = as.data.frame(warm_high)
+
+warm_low$time = c(seq(from = 1, to = 696))
+warm_high$time = c(seq(from = 1, to = 696))
+
+combination_warm <- merge(warm, warm_high, by ="time")
+final_combo_warm <- merge(combination_warm, warm_low, by = "time")
+
+final_combo_warm
+
+ggplot(final_combo_warm, aes(time)) + 
+  geom_line(aes(y = warm, col = "warm")) +
+  geom_line(aes(y = warm_low, col = "warm_low")) +
+  geom_line(aes(y = warm_high, col = "warm_high")) +
+  theme_classic() + 
+  ylab("Energy Required (J m-2)") +
+  xlab("Time Step") +
+  ggtitle("Energy Requirment for Warming Phase with +/- 3C") +
+  labs(colour = "Scenarios")
+  
+```
+
+
+##Depth change 
+
+```{r}
+
+snow_inputs$depth_low = snow_inputs$`snow depthCM` - 50
+snow_inputs$depth_high = snow_inputs$`snow depthCM` + 50
+
+ripe_low <- snow_ripe(hs = snow_inputs$depth_low, theta_ret = 0.03, pw = 1000, lambda = 0.334)
+ripe_high <- snow_ripe(hs = snow_inputs$depth_high, theta_ret = 0.03, pw = 1000, lambda = 0.334)
+
+
+ripe_low = as.data.frame(ripe_low)
+ripe_high = as.data.frame(ripe_high)
+
+ripe_low$time = c(seq(from = 1, to = 696))
+ripe_high$time = c(seq(from = 1, to = 696))
+
+combination_ripe <- merge(ripe, ripe_high, by ="time")
+final_combo_ripe <- merge(combination_ripe, ripe_low, by = "time")
+
+final_combo_ripe
+
+ggplot(final_combo_ripe, aes(time)) + 
+  geom_line(aes(y = ripe, col = "ripe")) +
+  geom_line(aes(y = ripe_low, col = "ripe_low")) +
+  geom_line(aes(y = ripe_high, col = "ripe_high")) +
+  theme_classic() + 
+  ylab("Energy Required (J m-2)") +
+  xlab("Time Step") +
+  ggtitle("Energy Requirment for Ripeing Phase with +/- 50 cm") +
+  labs(colour = "Scenarios")
+  
+
 
 
 ```
+
+
 
