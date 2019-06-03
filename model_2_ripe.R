@@ -12,8 +12,8 @@
 #' @author Mario Colon & Eric Holmes 
 #' 
 
-snow_ripe = function(hs, theta_ret = 0.03, pw = 1000, lambda = 0.334) {
-  Qm2 = theta_ret*hs*ρw*lambda
+snow_ripe = function(hs, theta_ret, pw , lambda) {
+  Qm2 = theta_ret*hs*pw*lambda
   
   return(Qm2)
 }

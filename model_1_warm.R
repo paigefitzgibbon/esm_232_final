@@ -1,10 +1,10 @@
 #' @title Snowmelt Model - Warming 
 #' 
-#' @param ci = heat capacity (constant)
-#' @param pw = density of water (constant)
+#' @param ci = heat capacity (constant), default = 2102 J kg -1 K-1
+#' @param pw = density of water (constant), default = 1000 kg m-3
 #' @param hm = water equivalent of snowpack (meters, input)
 #' @param Ts = snowpack temp (C, input)
-#' @param Tm = melting point of snow (C, constant) 
+#' @param Tm = melting point of snow (C, constant), default = 0
 #' 
 #' 
 #' @author Mario Colon & Eric Holmes 
@@ -12,9 +12,8 @@
 
 
 
-snow_melt = function(hm, Ts, ci = 2102, pw = 1000, Tm = 0) {
-  
-  Qcc = -ci*ρw*hm*(Ts-Tm) 
+snow_warm = function(hm, Ts, ci, pw, Tm) {
+  Qcc = -ci*pw*hm*(Ts-Tm) 
   
   return(Qcc)
 }

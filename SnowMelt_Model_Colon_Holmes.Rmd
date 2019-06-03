@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 
 library(tidyverse)
+library(deSolve)
 
 ```
 ###Load in data
@@ -37,11 +38,31 @@ source("model_3_output.R")
 ```
 
 
+###Data Wrangling
+
+```{r}
+
+
+
+
+```
+
+
 ##Model 1 - Warming Phase
 
 ```{r}
 
-melt <- snow_melt(hm = snow_inputs$SWECM, Ts = snow_inputs$`snow surface temperatureC`, pw = 1000, )
+warm <- snow_warm(hm = snow_inputs$SWECM, Ts = snow_inputs$`snow surface temperatureC`, ci = 2101, pw = 1000, Tm = 0)
+
+warm = as.data.frame(warm)
+
+warm$time = c(seq(from = 1, to = 696))
+
+warm
+ 
+
+ggplot(warm, aes(time, warm)) + geom_point()
+
 
 ```
 
@@ -50,12 +71,49 @@ melt <- snow_melt(hm = snow_inputs$SWECM, Ts = snow_inputs$`snow surface tempera
 
 ```{r}
 
+
+ripe <- snow_ripe(hs = snow_inputs$`snow depthCM`, theta_ret = 0.03, pw = 1000, lambda = 0.334)
+
+ripe = as.data.frame(ripe)
+
+ripe$time = c(seq(from = 1, to = 696))
+
+ripe
+ 
+
+ggplot(ripe, aes(time, ripe)) + geom_point()
+
 ```
 
 
 ##Model 3 - Output Phase 
 
 ```{r}
+
+
+output <- snow_output(hm = snow_inputs$SWECM, hwret = 0.03, pw = 1000, lambda = 0.334)
+
+output = as.data.frame(output)
+
+output$time = c(seq(from = 1, to = 696))
+
+output
+
+ggplot(output, aes(time, output)) + geom_point()
+
+```
+
+
+##ODE
+
+```{r}
+
+swe_time_step = data.frame(time  = seq(from = 1, to = 696))
+
+solar_compare = list(hm = 195.22, Ts = -9.13, ci = -2102, pw = 1000, Tm = 0)
+
+solar_results = ode(solar_compare$Ts, swe_time_step$time, snow_warm, solar_compare)
+
 
 ```
 
