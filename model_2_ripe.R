@@ -1,7 +1,7 @@
 #' @title Snowmelt Model - Ripening  
 #' 
 #' 
-#' @param theta_ret = liquid water equivalent (constant), snow density / density of water -->  typical = 0.03
+#' @param theta_ret = liquid water equivalent (constant), ratio of liquid water content to total volime of snowpack -->  typical = 0.03
 #' @param hs = snow depth (input)
 #' @param pw = density of water (constant), = 1000 kg m-3
 #' @param lambda = latent heat of fusion (0.334 MJ kg-1)

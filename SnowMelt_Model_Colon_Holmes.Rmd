@@ -165,15 +165,13 @@ ggplot(final_combo_warm, aes(time)) +
 ```
 
 
-##Depth change 
+##Theta_ret change +/- 
 
 ```{r}
 
-snow_inputs$depth_low = snow_inputs$`snow depthCM` - 50
-snow_inputs$depth_high = snow_inputs$`snow depthCM` + 50
 
-ripe_low <- snow_ripe(hs = snow_inputs$depth_low, theta_ret = 0.03, pw = 1000, lambda = 0.334)
-ripe_high <- snow_ripe(hs = snow_inputs$depth_high, theta_ret = 0.03, pw = 1000, lambda = 0.334)
+ripe_low <- snow_ripe(hs = snow_inputs$`snow depthCM`, theta_ret = 0.01, pw = 1000, lambda = 0.334)
+ripe_high <- snow_ripe(hs = snow_inputs$`snow depthCM`, theta_ret = 0.05, pw = 1000, lambda = 0.334)
 
 
 ripe_low = as.data.frame(ripe_low)
@@ -194,7 +192,7 @@ ggplot(final_combo_ripe, aes(time)) +
   theme_classic() + 
   ylab("Energy Required (J m-2)") +
   xlab("Time Step") +
-  ggtitle("Energy Requirment for Ripeing Phase with +/- 50 cm") +
+  ggtitle("Energy Requirment for Ripeing Phase with +/- .02 θret Ratio") +
   labs(colour = "Scenarios")
   
 
