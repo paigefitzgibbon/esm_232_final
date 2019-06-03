@@ -106,7 +106,7 @@ ggplot(output, aes(time, output)) +
 
 ```
 
-###Energy Combination 
+###Energy Combination for CUES only 
 
 ```{r}
 
@@ -122,9 +122,49 @@ ggplot(final_combo, aes(time, energy)) +
   theme_classic() + 
   ylab("Energy Required (J m-2)") +
   xlab("Time Step") +
-  ggtitle("Energy Requirment for Overall Snowmelt")
+  ggtitle("Energy Requirment for Overall Snowmelt CUES")
 
 ```
+
+#Spatial
+
+```{r}
+
+spatial <- read_csv("spatialinputs.csv")
+spatial$burnside_SWE_cm <- spatial$burnside_SWE_mm/10
+
+warm_burnside <- snow_warm(hm = spatial$burnside_SWE_cm, Ts = snow_inputs$`snow surface temperatureC`, ci = 2101, pw = 1000, Tm = 0)
+ripe_burnside <- snow_ripe(hs = spatial$burnside_snowdepth_cm, theta_ret = 0.03, pw = 1000, lambda = 0.334)
+output_burnside <- snow_output(hm = spatial$burnside_SWE_cm, hwret = 0.03, pw = 1000, lambda = 0.334)
+
+
+warm_burnside = as.data.frame(warm_burnside)
+ripe_burnside = as.data.frame(ripe_burnside)
+output_burnside = as.data.frame(output_burnside)
+
+warm_burnside$time = c(seq(from = 1, to = 720))
+ripe_burnside$time = c(seq(from = 1, to = 720))
+output_burnside$time = c(seq(from = 1, to = 720))
+
+combination_warm_ripe_burnside <- merge(warm_burnside, ripe_burnside, by ="time")
+final_combo_burnside <- merge(combination_warm_ripe_burnside, output_burnside, by = "time")
+
+final_combo_burnside$energy = final_combo_burnside$warm + final_combo$ripe + final_combo$output
+
+final_combo_burnside
+
+ggplot(final_combo_burnside, aes(time, energy)) + 
+  geom_line(col = "purple") +
+  theme_classic() + 
+  ylab("Energy Required (J m-2)") +
+  xlab("Time Step") +
+  ggtitle("Energy Requirment for Overall Snowmelt Burnside")
+
+
+
+
+```
+
 
 ###Sensitivity Analysis
 
