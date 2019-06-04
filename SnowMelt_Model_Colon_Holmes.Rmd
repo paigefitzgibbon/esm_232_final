@@ -241,4 +241,100 @@ ggplot(final_combo_ripe, aes(time)) +
 ```
 
 
+Spatial Analysis
+
+Squaw Valley
+```{r squaw}
+
+squaw <- read_csv("squaw.csv")
+warm_squaw <- snow_warm(hm = squaw$squaw_swe_cm
+, Ts = squaw$squaw_snowtemp, ci = 2101, pw = 1000, Tm = 0)
+
+warm_squaw = as.data.frame(warm_squaw)
+
+warm_squaw$time = c(seq(from = 1, to = 696))
+
+
+ggplot(warm_squaw, aes(time, warm_squaw)) + 
+  geom_line(col = "magenta") +
+  theme_classic() + 
+  ylab("Energy Required (J m-2)") +
+  xlab("Time Step") +
+  ggtitle("Energy Requirement for Warming Phase\nSquaw Valley")
+
+```
+
+Leavitt Meadows
+```{r leavittil}
+
+leavit <- read_csv("leavittil.csv")
+warm_leavit <- snow_warm(hm = leavit$leavit_swe_cm, Ts = leavit$leavitt_snowtemp, ci = 2101, pw = 1000, Tm = 0)
+
+warm_leavit = as.data.frame(warm_leavit)
+
+warm_leavit$time = c(seq(from = 1, to = 696))
+
+
+ggplot(warm_leavit, aes(time, warm_leavit)) + 
+  geom_line(col = "blue") +
+  theme_classic() + 
+  ylab("Energy Required (J m-2)") +
+  xlab("Time Step") +
+  ggtitle("Energy Requirement for Warming Phase\nLeavitt Meadows")
+
+```
+
+```{r}
+burnside <- read_csv("burnside.csv")
+warm_burnside <- snow_warm(hm = burnside$burnside_SWE_cm, Ts = burnside$burnside_snowtemp, ci = 2101, pw = 1000, Tm = 0)
+
+warm_burnside = as.data.frame(warm_burnside)
+
+warm_burnside$time = c(seq(from = 1, to = 696))
+
+
+ggplot(warm_burnside, aes(time, warm_burnside)) + 
+  geom_line(col = "darkgreen") +
+  theme_classic() + 
+  ylab("Energy Required (J m-2)") +
+  xlab("Time Step") +
+  ggtitle("Energy Requirement for Warming Phase\nBurnside")
+
+```
+
+
+merge all three locations energy requirement
+```{r}
+spatial1 <- merge(warm, warm_burnside, by="time")
+spatial2 <- merge(warm_squaw, warm_leavit, by="time")
+spatial_final <- merge(spatial1, spatial2, by="time")
+
+ggplot(spatial_final, aes(time)) + 
+  geom_line(aes(y = warm, col = "Cues")) +
+  geom_line(aes(y = warm_squaw, col = "Squaw Valley")) +
+  geom_line(aes(y = warm_burnside, col = "Burnside")) +
+  geom_line(aes(y = warm_leavit, col = "Leavitt Meadow")) +
+  theme_classic() + 
+  ylab("Energy Required (J m-2)") +
+  xlab("Time Step") +
+  ggtitle("Energy Requirment for Ripeing Phase Across\nVarious Sierra Nevada Snowpacks") +
+  labs(colour = "Snowpack")
+```
+
+
+
+Boxplot attempt
+```{r}
+ggplot(spatial_final) + 
+  geom_boxplot(aes(y = warm, col = "Cues")) +
+  geom_boxplot(aes(y = warm_squaw, col = "Squaw Valley")) +
+  geom_boxplot(aes(y = warm_burnside, col = "Burnside")) +
+geom_boxplot(aes(y = warm_leavit, col = "Leavitt Meadow")) +
+  theme_classic() + 
+  ylab("Energy Required (J m-2)") +
+  xlab("Time Step") +
+  ggtitle("Energy Requirment for Ripeing Phase Across\nVarious Sierra Nevada Snowpacks") +
+  labs(colour = "Snowpack")
+
+```
 
