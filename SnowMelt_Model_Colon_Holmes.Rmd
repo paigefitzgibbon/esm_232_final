@@ -241,4 +241,29 @@ ggplot(final_combo_ripe, aes(time)) +
 ```
 
 
+Spatial Analysis
+
+```{r squaw}
+
+squaw <- read_csv("squaw.csv")
+warm_squaw <- snow_warm(hm = snow_inputs$SWECM, Ts = squaw$squaw_snowtemp, ci = 2101, pw = 1000, Tm = 0)
+
+warm_squaw = as.data.frame(warm_squaw)
+
+warm_squaw$time = c(seq(from = 1, to = 696))
+
+
+ggplot(warm_squaw, aes(time, warm_squaw)) + 
+  geom_line(col = "purple") +
+  theme_classic() + 
+  ylab("Energy Required (J m-2)") +
+  xlab("Time Step") +
+  ggtitle("Energy Requirment for Warming Phase")
+
+```
+
+
+```{r}
+
+```
 
