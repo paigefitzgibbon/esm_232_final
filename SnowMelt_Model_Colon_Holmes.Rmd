@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 
 library(tidyverse)
+library(reshape2)
 
 ```
 ###Load in data
@@ -325,7 +326,34 @@ ggplot(spatial_final, aes(time)) +
 
 Boxplot attempt
 ```{r}
-ggplot(spatial_final) + 
+
+
+Cues <- max(spatial_final$warm, na.rm=TRUE)
+Squaw <- max(spatial_final$warm_squaw, na.rm=TRUE)
+Burnside <- max(spatial_final$warm_burnside, na.rm=TRUE)
+Leavitt <- max(spatial_final$warm_leavit, na.rm=TRUE)
+
+Cues
+Squaw
+Burnside
+Leavitt
+
+#bind attempt 
+
+maximum_e <- rbind(Cues, Squaw, Burnside, Leavitt)
+
+maximum_e
+
+#alternative attempt
+
+Location <- c('Cues','Squaw', 'Burnside', 'Leavitt')
+Energy <- c(7795845380, 6537269904, 4329858456, 479221292)
+
+max_e <- data.frame(Location, Energy)
+
+hist(max_e$Energy)
+
+ggplot(max_e) + 
   geom_boxplot(aes(y = warm, col = "Cues")) +
   geom_boxplot(aes(y = warm_squaw, col = "Squaw Valley")) +
   geom_boxplot(aes(y = warm_burnside, col = "Burnside")) +
@@ -333,7 +361,7 @@ geom_boxplot(aes(y = warm_leavit, col = "Leavitt Meadow")) +
   theme_classic() + 
   ylab("Energy Required (J m-2)") +
   xlab("Time Step") +
-  ggtitle("Energy Requirment for Ripeing Phase Across\nVarious Sierra Nevada Snowpacks") +
+  ggtitle("Energy Requirment for Warming Phase Across\nVarious Sierra Nevada Snowpacks") +
   labs(colour = "Snowpack")
 
 ```
