@@ -324,8 +324,8 @@ ggplot(spatial_final, aes(time)) +
 
 
 
-Boxplot attempt
-```{r}
+other plot
+```{r Plot}
 
 
 Cues <- max(spatial_final$warm, na.rm=TRUE)
