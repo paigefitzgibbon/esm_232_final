@@ -242,7 +242,9 @@ ggplot(final_combo_ripe, aes(time)) +
 ```
 
 
-Spatial Analysis
+###Spatial Analysis
+
+To determine how the energy input requirement to warm a snowpack changes spatially, three additional sites were analyzed. The snowpack SWE data for these location was collected from the National Weather and Climate Center from their SNOTEL monitoring sites. The first site analyzed was at Squaw Valley ski resort, located at 8,013 ft. in elevation. The SWE at this site measured 159.8cm on April 1st. The next site analyzed was Leavitt Meadows, at an elevation of 7,198ft. The SWE at this site was 13.7cm on April 1st, reflecting the location’s warmer climate and low altitude. The final site analyzed was Burnside, located at an elevation of 8,129 ft. The SWE at this site was 111.3cm. Energy input requirement was calculated based on snow surface temperature, SWE, and elevation. The highest energy input requirement was at CUES, which is the coldest site at the highest elevation. The lowest energy requirement was at Leavitt Meadows, which was the warmest site at the lowest elevation. The spatial analysis illustrated the changes in energy requirement to warm a snow pack as one travels up and down the mountain and as one varies the size of their original snowpack. 
 
 Squaw Valley
 ```{r squaw}
@@ -285,6 +287,7 @@ ggplot(warm_leavit, aes(time, warm_leavit)) +
 
 ```
 
+Burnside
 ```{r}
 burnside <- read_csv("burnside.csv")
 warm_burnside <- snow_warm(hm = burnside$burnside_SWE_cm, Ts = burnside$burnside_snowtemp, ci = 2101, pw = 1000, Tm = 0)
@@ -304,7 +307,7 @@ ggplot(warm_burnside, aes(time, warm_burnside)) +
 ```
 
 
-merge all three locations energy requirement
+Line Graph
 ```{r}
 spatial1 <- merge(warm, warm_burnside, by="time")
 spatial2 <- merge(warm_squaw, warm_leavit, by="time")
@@ -324,7 +327,7 @@ ggplot(spatial_final, aes(time)) +
 
 
 
-other plot
+Bar Graph
 ```{r Plot}
 
 
